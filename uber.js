@@ -1,66 +1,3 @@
-/*var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-var xhr = new XMLHttpRequest();
-
-xhr.open('GET', 'https://api.uber.com/v1/products?latitude=37.7759792&longitude=-122.41823');
-xhr.setRequestHeader("Authorization", "wZQgCwLn40j65ukJBi3EMqufTDKgYSJPmcIPOgh7");
-xhr.send(null);
-xhr.onreadystatechange = function () {
-	   if (xhr.readyState == 4) {
-		   console.log(xhr.status);
-	   }
-	};
-
-	var Uber = require('node-uber');
-
-	var uber = new Uber({
-		client_id: 'LD26IvwOtoKWMNQClhGQD9XJZSVNkYUi',
-		client_secret: 'szpcAy4sJkV6PCWJwSC5WZm8NrxseLkA7i-Y07YA',
-		server_token: 'wZQgCwLn40j65ukJBi3EMqufTDKgYSJPmcIPOgh7',
-		redirect_uri: 'http://www.google.com',
-		name: 'ShareMyRide'
-	});
-
-	uber.products.list({ latitude: 3.1357, longitude: 101.6880 }, function (err, res) {
-		if (err) console.error(err);
-		else console.log(res);
-	});
-
-	uber.promotions.list({ 
-		start_latitude: 3.1357, start_longitude: 101.6880, 
-		end_latitude: 3.0833, end_longitude: 101.6500 
-	}, function (err, res) {
-		if (err) console.error(err);
-		else console.log(res);
-	});
-
-uber.estimates.price({ 
-  start_latitude: 3.1357, start_longitude: 101.6880, 
-  end_latitude: 3.0833, end_longitude: 101.6500 
-}, function (err, res) {
-  if (err) console.error(err);
-  else console.log(res);
-});
-
-uber.estimates.time({ 
-  start_latitude: 3.1357, start_longitude: 101.6880
-}, function (err, res) {
-  if (err) console.error(err);
-  else console.log(res);
-});
-
-
-uber.user.profile(params, function (err, res) {
-  if (err) console.log(err);
-  else console.log(res);
-});*/
-
-/*var http=require("https");
-var params={'client_id':'LD26IvwOtoKWMNQClhGQD9XJZSVNkYUi','response_type':'code'};
-http.get(params,"https://login.uber.com/oauth/authorize",function(res) {
-  console.log((res));
-}).on('error', function(e) {
-  console.log("Got error: " + e.message);
-});*/
 
 
 
@@ -78,7 +15,7 @@ app.use(express.static(__dirname + '/public'));
 
 // get the app environment from Cloud Foundry
 var appEnv = cfenv.getAppEnv();
-
+var token='';
 // start server on the specified port and binding host
 //app.listen(appEnv.port, appEnv.bind, function() {
 	app.listen(1337, '127.0.0.1', function() {
@@ -91,7 +28,6 @@ var appEnv = cfenv.getAppEnv();
 		console.log('server hit');
 		request({url:'https://login.uber.com/oauth/authorize', qs:propertiesObject,followRedirect:false}, function(err, response, body) {
 			if(err) { console.log(err); return; }
-
 			res.end();
 		});
 	});
@@ -101,40 +37,124 @@ var appEnv = cfenv.getAppEnv();
 		console.log(reqst.query.code);
 
 
-	request({
-		method: 'POST',
-		url: 'https://login.uber.com/oauth/token',
-		form: 
-		{"grant_type" : "authorization_code",
-		"client_secret":"szpcAy4sJkV6PCWJwSC5WZm8NrxseLkA7i-Y07YA",
-		"client_id":"LD26IvwOtoKWMNQClhGQD9XJZSVNkYUi",
-		"redirect_uri":"http://localhost:1337/getAuth",
-		"code":reqst.query.code
-	},
-},
-function (error, response, body) {
-	if(error)
-	{
-		console.log(error);
-	}
-	var token=(JSON.parse(body).access_token);
-	request({
-		method: 'GET',
-		url: 'https://sandbox-api.uber.com/v1/products?latitude=37.7759792&longitude=-122.41823',
-		headers:{
-			"Authorization":"Bearer "+token
+		request({
+			method: 'POST',
+			url: 'https://login.uber.com/oauth/token',
+			form: 
+			{"grant_type" : "authorization_code",
+			"client_secret":"szpcAy4sJkV6PCWJwSC5WZm8NrxseLkA7i-Y07YA",
+			"client_id":"LD26IvwOtoKWMNQClhGQD9XJZSVNkYUi",
+			"redirect_uri":"http://localhost:1337/getAuth",
+			"code":reqst.query.code
 		},
-},
-function (error, response, body) {
-console.log(body);
-});
+	},
+	function (error, response, body) {
+		if(error)
+		{
+			console.log(error);
+		}
+		token=(JSON.parse(body).access_token);
+		res.redirect('afterLogin.html');
+		res.end();
+	});
+	});
 
-});
 
 
 
+	app.get('/getHistory', function(reqst, res) {
+		request({
+			method: 'GET',
+			url: 'https://api.uber.com/v1.1/history?limit=50',
+			headers:{
+				"Authorization":"Bearer "+token
+			},
+		},
+		function (error, response, body) {
+			res.send(body);
+			res.end();
+		});
+	});
+var prof='';
+
+app.get('/setProfile', function(reqst, res) {
+		request({
+			method: 'GET',
+			url: 'https://api.uber.com/v1/me',
+			headers:{
+				"Authorization":"Bearer "+token
+			},
+		},
+		function (error, response, body) {
+			prof=body;
+			res.end();
+		});
+	});
+
+app.get('/getProfile', function(reqst, res) {
+			res.send(prof);
+			res.end();
+	});
 
 
+app.get('/getPrice', function(reqst, res) {
+		var start_lat=reqst.query.start_lat;
+		var end_lat=reqst.query.end_lat;
+		var start_long=reqst.query.start_long;
+		var end_long=reqst.query.end_long;
+		
+		request({
+			method: 'GET',
+			url: 'https://api.uber.com/v1/estimates/price?start_latitude='+start_lat+'&start_longitude='+start_long+'&end_latitude='+end_lat+'&end_longitude='+end_long,
+			headers:{
+				"Authorization":"Bearer "+token
+			},
+		},
+		function (error, response, body) {
+			res.send(body);
+			res.end();
+		});
+	});
+var products='';
+app.get('/getProducts', function(reqst, res) {
+		var latitude=reqst.query.latitude;
+		var longitude=reqst.query.longitude;
+		request({
+			method: 'GET',
+			url: 'https://api.uber.com/v1/products?latitude='+latitude+'&longitude='+longitude,
+			headers:{
+				"Authorization":"Bearer "+token
+			},
+		},
+		function (error, response, body) {
+			products=body;
+			res.send(body);
+			res.end();
+		});
+	});
 
 
-});
+app.get('/makeRequest', function(reqst, res) {
+		var start_lat=reqst.query.start_lat;
+		var start_long=reqst.query.start_long;
+		var end_lat=reqst.query.end_lat;
+		var end_long=reqst.query.end_long;
+		
+		request({
+			method: 'POST',
+			url: 'https://sandbox-api.uber.com/v1/requests',
+			headers:{
+				"Authorization":"Bearer "+token
+			},
+			data:{'product_id':'',
+					'start_latitude':start_lat,
+					'start_longitude':start_long,
+					'end_latitude':end_lat,
+					'end_longitude':end_lat,
+								}
+		},
+		function (error, response, body) {
+			res.send(body);
+			res.end();
+		});
+	});

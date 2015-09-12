@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title></title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+
+    <link href='fullcalendar.css' rel='stylesheet' />
+    <link href='fullcalendar.print.css' rel='stylesheet' media='print' />
+    <script src='lib/moment.min.js'></script>
+    <script src='lib/jquery.min.js'></script>
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+    <script src='fullcalendar.min.js'></script>
+    <script>
+
+        $(document).ready(function() {
+
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                defaultDate: '2015-09-12',
+                selectable: true,
+                selectHelper: true,
+                select: function(start, end) {
+                    var title = prompt('Event Title:');
+                    var eventData;
+                    if (title) {
+                        eventData = {
+                            title: title,
+                            start: start,
+                            end: end
+                        };
+                        console.log(eventData);
+                    $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+                    a
+                }
+                $('#calendar').fullCalendar('unselect');
+            },
+            editable: true,
+            eventLimit: true, // allow "more" link when too many events
+            events: [
+            {
+                id: 999,
+                title: 'Repeating Event',
+                start: '2015-09-16T16:00:00'
+            },
+            {
+                title: 'Pre Book Uber after Meeting',
+                start: '2015-09-13T10:30:00',
+                end: '2015-09-13T11:30:00'
+            },
+            {
+                title: 'Leave for Lunch',
+                start: '2015-09-18T12:00:00'
+            },
+            {
+                title: 'Person B booked Uber from A to B',
+                start: '2015-09-22T14:30:00'
+            },
+            {
+                title: 'Happy Hour',
+                start: '2015-09-24T17:30:00'
+            },
+            {
+                title: 'Book Uber for Dinner',
+                start: '2015-09-26T20:00:00'
+            },
+            {
+                title: 'Book Uber for Birthday Party',
+                start: '2015-09-21T07:00:00'
+            }
+            ]
+        });
+
+});
+
+</script>
+<style>
+
+    body {
+        margin: 0px 10px;
+        padding: 0;
+        font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+        font-size: 14px;
+    }
+
+    #calendar {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+</style>
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+
+    <body>
+
+        <div id="wrapper">
+
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav">
+                    <li class="sidebar-brand">
+                        <a href="index.html">
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <a href="afterLogin.html">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="preBook.html">Pre Book</a>
+                    </li>
+                    <li>
+                        <a href="addFriends.html">Add Friends</a>
+                    </li>
+                    <li>
+                        <a href="friendsCalendar.html">Calendar</a>
+                    </li>
+                    <li>
+                        <a href="aboutUs.html">About Us</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /#sidebar-wrapper -->
+
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id='calendar'></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /#page-content-wrapper -->
+
+        </div>
+        <!-- /#wrapper -->
+
+        <!-- jQuery -->
+        <script src="js/angular.min.js"></script>
+        <script src="js/friendsCalendar-angular.js"></script>
+
+
+    </body>
+
+    </html>
