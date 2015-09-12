@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <title>scrollReveal.js | Easily reveal elements as they enter the viewport.</title>
+    <meta content="Easily reveal elements as they enter the viewport. An open-source project by Julian Lloyd" name="description" /><!-- Initialize proper device scaling for media queries. (Yay responsive!) -->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" /><!-- Serve Typekit font familes (Proxima Nova) --><script type="text/javascript" src="//use.typekit.net/fhe3tec.js"></script><script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+    <title>Shop</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+
+    <link href="css/sweetalert.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+
+    <body ng-controller="myCtrl" background="a.jpg">
+
+        <div id="wrapper">
+
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav">
+                    <li class="sidebar-brand">
+                        <a href="index.html">
+                            Homepage
+                        </a>
+                    </li>
+                    <li>
+                        <a href="learn.html">What is Bitcoin?</a>
+                    </li>
+                    <li>
+                        <a href="shop.html">Shop</a>
+                    </li>
+                    <li>
+                        <a href="tickr.html">BitTickr</a>
+                    </li>
+                    <li>
+                        <a href="pay.html">Settle Up/Pay</a>
+                    </li>
+                    <li>
+                        <a href="balance.html">My Bit</a>
+                    </li>
+                    <li>
+                        <a href="payBills.html">Pay Bills</a>
+                    </li>
+                    <li>
+                        <a href="transactions.html">Transactions History</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /#sidebar-wrapper -->
+
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="#menu-toggle" class="btn btn-info" id="menu-toggle">Toggle Menu</a>
+                            <form class="navbar-form" role="search">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search"  ng-model="searcher">
+                                    <div class="input-group-btn">
+                                        <div ng-click="searchItem()" > <button class="btn btn-default" type="submit" ng-disabled="searcher==''" ><i class="glyphicon glyphicon-search" ></i></button></div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div  class="row jumbotron" ng-repeat="x in ebayData track by $index" style="font-size:18px;">
+                        <div  class="col-lg-3">
+                            <img src="{{x.galleryURL}}" style="height:300px;width:250px;border-radius:15px;">
+                        </div>
+                        <div class="col-lg-9">
+                            <p>Product Name : {{x.title}}</p>
+                            <p>Price: {{x.sellingStatus.currentPrice.USD}} USD</p>
+                            <p>One Day Shipping Available : {{x.shippingInfo.oneDayShippingAvailable}}</p>
+                            <p>Shipping Type : {{x.shippingInfo.shippingType}}</p>
+                            <p>Shipping Cost : {{x.shippingInfo.shippingServiceCost.USD}}</p>
+                            
+                            <button class="btn btn-info" ng-click="buyItem($index)">Buy This Item</button>
+                        </div> 
+                        <hr/> 
+                    </div>
+                    <div ng-show="ebayData!=''">
+                        <button class="btn btn-info" ng-click="fetchNewResults()">Next Page</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /#page-content-wrapper -->
+
+        </div>
+        <!-- /#wrapper -->
+
+        <!-- jQuery -->
+        <script src="js/jquery.js"></script>
+
+        <!-- Bootstrap Core JavaScript -->
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/scrollReveal.js"></script>
+        <script src="js/angular.min.js"></script>    
+        <script src="js/nanobar.min.js"></script>
+        <script src="js/sweetalert.min.js"></script>
+        <script src="assets/js/shop.js"></script>
+        <script src="assets/js/shop-angular.js"></script>
+        <!-- Menu Toggle Script -->
+        <script>
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+        </script>
+
+    </body>
+
+    </html>
