@@ -14,7 +14,7 @@ else{
 	if(true){
 		$data = json_decode(file_get_contents("php://input"));
 		$UserName = mysqli_real_escape_string($conn,$data->UserName);
-		$sql = "SELECT * FROM userapps where UserName!='$UserName'";
+		$sql = "SELECT * FROM userapps ";
 
 		$result = $conn->query($sql);
 		if ($result->num_rows > 0) {

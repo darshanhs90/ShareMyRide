@@ -1,6 +1,7 @@
 var app=angular.module('myApp',[]);
 app.controller('myCtrl',function($scope,$http,$sce) {
 	$scope.a='';
+  $scope.picLink='';
 	$http({
 		url: 'http://localhost:1337/getHistory',
 		method: "GET"
@@ -135,4 +136,16 @@ $http({
   method: "GET"
 }).success(function(data, status, headers, config) {
   console.log(data);
+  $scope.imglink=data.picture;
+  console.log(data.first_name);
+
+$http.get('http://localhost:1337/sendphp?UserName='+data.first_name+'&Emailid='+data.email+'&PicLink='+data.picture)
+.success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.names=data;
+    }).error(function(data, status) { 
+      alert("Error While Updating,Try Again");
+    });
+  });
+
 });

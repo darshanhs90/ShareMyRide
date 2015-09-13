@@ -15,7 +15,7 @@ app.use(express.static(__dirname + '/public'));
 
 // get the app environment from Cloud Foundry
 var appEnv = cfenv.getAppEnv();
-var token='';
+var token;
 // start server on the specified port and binding host
 //app.listen(appEnv.port, appEnv.bind, function() {
 	app.listen(1337, '127.0.0.1', function() {
@@ -75,9 +75,9 @@ var token='';
 			res.end();
 		});
 	});
-var prof='';
+	var prof='';
 
-app.get('/setProfile', function(reqst, res) {
+	app.get('/setProfile', function(reqst, res) {
 		request({
 			method: 'GET',
 			url: 'https://api.uber.com/v1/me',
@@ -92,18 +92,29 @@ app.get('/setProfile', function(reqst, res) {
 		});
 	});
 
-app.get('/getProfile', function(reqst, res) {
-			res.send(prof);
-			res.end();
+	app.get('/getProfile', function(reqst, res) {
+		res.send(prof);
+		res.end();
 	});
 
 
-app.get('/getPrice', function(reqst, res) {
+	app.get('/getPrice', function(reqst, res) {
 		start_lat=reqst.query.start_lat;
 		end_lat=reqst.query.end_lat;
 		start_long=reqst.query.start_long;
 		end_long=reqst.query.end_long;
+
+		end_lat=start_lat-0.05;
+		end_long=start_long-0.05;
 		
+		
+		console.log('1 is'+start_lat);
+		console.log('2 is'+start_long);
+		console.log('3 is'+end_lat);
+		console.log('4 is'+end_long);
+
+
+		console.log('token is '+token);
 		request({
 			method: 'GET',
 			url: 'https://api.uber.com/v1/estimates/price?start_latitude='+start_lat+'&start_longitude='+start_long+'&end_latitude='+end_lat+'&end_longitude='+end_long,
@@ -116,11 +127,15 @@ app.get('/getPrice', function(reqst, res) {
 			res.end();
 		});
 	});
-var products='';
-var start_lat='',start_long='',end_lat='',end_long='';
-app.get('/getProducts', function(reqst, res) {
+	var products='';
+	var start_lat='',start_long='',end_lat='',end_long='';
+	app.get('/getProducts', function(reqst, res) {
+		console.log(reqst.query);
 		var latitude=reqst.query.latitude;
 		var longitude=reqst.query.longitude;
+		console.log(reqst.query.latitude);
+		console.log(reqst.query.longitude);
+		
 		request({
 			method: 'GET',
 			url: 'https://api.uber.com/v1/products?latitude='+latitude+'&longitude='+longitude,
@@ -134,13 +149,13 @@ app.get('/getProducts', function(reqst, res) {
 			res.end();
 		});
 	});
+	var needle=require("needle");
 
-
-app.get('/makeRequest', function(reqst, res) {
-		 start_lat=reqst.query.start_lat;
-		 start_long=reqst.query.start_long;
-		 end_lat=reqst.query.end_lat;
-		 end_long=reqst.query.end_long;
+	app.get('/makeRequest', function(reqst, res) {
+		start_lat=reqst.query.start_lat;
+		start_long=reqst.query.start_long;
+		end_lat=reqst.query.end_lat;
+		end_long=reqst.query.end_long;
 		request({
 			method: 'POST',
 			url: 'https://sandbox-api.uber.com/v1/requests',
@@ -148,14 +163,98 @@ app.get('/makeRequest', function(reqst, res) {
 				"Authorization":"Bearer "+token
 			},
 			data:{'product_id':'',
-					'start_latitude':start_lat,
-					'start_longitude':start_long,
-					'end_latitude':end_lat,
-					'end_longitude':end_lat,
-								}
-		},
-		function (error, response, body) {
+			'start_latitude':start_lat,
+			'start_longitude':start_long,
+			'end_latitude':end_lat,
+			'end_longitude':end_lat,
+		}
+	},
+	function (error, response, body) {
+		res.send(body);
+		res.end();
+	});
+	});
+
+//{'UserName':data.first_name,'Emailid':data.email,'PicLink':data.picture}
+
+
+
+app.get('/sendphp', function(reqst, res) {
+	console.log(reqst.query);
+	needle.post('http://localhost/ShareMyRide/public/php/add_user.php', {UserName:reqst.query.UserName,Emailid:reqst.query.Emailid,PicLink:reqst.query.PicLink}, 
+		function(err, resp, body){
 			res.send(body);
 			res.end();
 		});
-	});
+
+
+});
+
+app.get('/php_get_all_friends', function(reqst, res) {
+	console.log(reqst.query);
+	needle.post('http://localhost/ShareMyRide/public/php/php_get_all_friends.php', {UserName:reqst.query.UserName}, 
+		function(err, resp, body){
+			res.send(body);
+			res.end();
+		});
+
+
+
+});
+app.get('/php_add_friend', function(reqst, res) {
+	console.log(reqst.query);
+	needle.post('http://localhost/ShareMyRide/public/php/php_add_friend.php', {UserName:reqst.query.UserName,FriendName:reqst.query.FriendName}, 
+		function(err, resp, body){
+			res.send(body);
+			res.end();
+		});
+
+
+});
+
+app.get('/php_delete_friend', function(reqst, res) {
+	console.log(reqst.query);
+	needle.post('http://localhost/ShareMyRide/public/php/php_delete_friend.php', {UserName:reqst.query.UserName,FriendName:reqst.query.FriendName}, 
+		function(err, resp, body){
+			res.send(body);
+			res.end();
+		});
+
+
+
+});
+
+app.get('/php_get_user_apps', function(reqst, res) {
+	console.log(reqst.query);
+	needle.post('http://localhost/ShareMyRide/public/php/php_get_user_apps.php', {UserName:reqst.query.UserName,Month:reqst.query.Month}, 
+		function(err, resp, body){
+			res.send(body);
+			res.end();
+		});
+
+
+});
+
+app.get('/php_get_all_apps', function(reqst, res) {
+	console.log(reqst.query);
+	needle.post('http://localhost/ShareMyRide/public/php/php_get_all_apps.php', {UserName:reqst.query.UserName}, 
+		function(err, resp, body){
+			res.send(body);
+			res.end();
+		});
+
+});
+
+
+app.get('/php_add_my_apps', function(reqst, res) {
+	console.log(reqst.query);
+	needle.post('http://localhost/ShareMyRide/public/php/php_add_my_apps.php', {UserName:reqst.query.UserName,Origin:reqst.query.Origin,Date:reqst.query.Date,Month:reqst.query.Month,
+		Destination:reqst.query.Destination,Time:reqst.query.Time}, 
+		function(err, resp, body){
+			res.send(body);
+			res.end();
+		});
+
+
+
+});

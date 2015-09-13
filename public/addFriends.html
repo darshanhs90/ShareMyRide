@@ -16,7 +16,8 @@
 
     <!-- Custom CSS -->
     <link href="css/simple-sidebar.css" rel="stylesheet">
-
+    <link href="css/alertify.default.css" rel="stylesheet">  
+      <link href="css/alertify.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -34,7 +35,7 @@
             <div id="sidebar-wrapper">
                 <ul class="sidebar-nav">
                     <li class="sidebar-brand">
-                        <img src="a.jpg" style="width:70px;height:70px;"/>
+                        <img nng-src="{{imglink}}"  style="width:70px;height:70px;"/>
                     </li>
                     <li>
                         <a href="afterLogin.html">Dashboard</a>
@@ -76,13 +77,13 @@
                         </form>
                         <br/>
                         <div>
-                        List of Trips
+                        <h2>List of Trips</h2>
                             <div ng-repeat="trip in trips track by $index">
-                            {{trip.Time}}
-                            {{trip.Origin}}
-                            {{trip.Destination}}
-                            {{trip.Date}}
-                            {{trip.Month}}
+                            Time:{{trip.Time}}<br/>
+                            Origin:{{trip.Origin}}<br/>
+                            Destination:{{trip.Destination}}<br/>
+                            Date:{{trip.Date}}/{{tip.Month}}/2015<br/>
+                            <hr/>
                             </div>
                         </div>
                         </div>
@@ -107,6 +108,7 @@
                 $("#wrapper").toggleClass("toggled");
             });
         </script>
+        <script src="js/alertify.js"></script>
         <script src="js/angular.min.js"></script>
         <script src="js/addFriends-angular.js"></script>
     </body>

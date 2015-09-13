@@ -2,6 +2,7 @@ var app=angular.module('myApp',[]);
 app.controller('myCtrl',function($scope,$http,$sce) {
 	console.log('herer');
 	$scope.names=['Jani','Hege','Kai'];
+	$scope.piclink;
 	$scope.myProf='';
 	var page = "http://localhost:1337/getProfile";
 	$scope.UserName='';
@@ -10,10 +11,12 @@ app.controller('myCtrl',function($scope,$http,$sce) {
 		console.log(response);
 		$scope.myProf=response;
 		$scope.UserName=$scope.myProf.first_name;
+		$scope.imglink=$scope.myProf.picture;
+		console.log($scope.UserName);
 	//get my friends
-
-	$http.post('./php/php_get_all_friends.php', {'UserName':$scope.UserName}
-		).success(function(data, status, headers, config) {
+//done
+	$http.get('http://localhost:1337/php_get_all_friends?UserName='+$scope.UserName)
+	.success(function(data, status, headers, config) {
 			console.log(data);
 			$scope.names=data;
 		}).error(function(data, status) { 
@@ -24,19 +27,13 @@ app.controller('myCtrl',function($scope,$http,$sce) {
 
 $scope.getAllFriends=function(){
 
-$http.post('./php/php_get_all_friends.php', {'UserName':$scope.UserName}
-		).success(function(data, status, headers, config) {
+	$http.get('http://localhost:1337/php_get_all_friends?UserName='+$scope.UserName)
+	.success(function(data, status, headers, config) {
 			console.log(data);
 			$scope.names=data;
 		}).error(function(data, status) { 
 			alert("Error While Updating,Try Again");
 		});
-	});
-
-
-
-
-
 }
 
 
@@ -46,12 +43,13 @@ $http.post('./php/php_get_all_friends.php', {'UserName':$scope.UserName}
 $scope.addFriend=function($val){
 
 
-	$http.post('./php/php_add_friend.php', {'UserName':$scope.UserName,'FriendName':$scope.names[$val].UserName}
-		).success(function(data, status, headers, config) {
-			alert(data);
+	$http.get('http://localhost:1337/php_add_friend?UserName='+$scope.UserName+'&FriendName='+$scope.emailid)
+	.success(function(data, status, headers, config) {
+			alertify.success($scope.emailid+' has been added as a friend successfully');
 		}).error(function(data, status) { 
 			alert("Error While Updating,Try Again");
 			$scope.getAllFriends();
+			$scope.$apply();
 		});
 	}
 
@@ -59,9 +57,10 @@ $scope.addFriend=function($val){
 
 
  $scope.deleteFriend=function($val){
- 	$http.post('./php/php_delete_friend.php', {'UserName':$scope.UserName,'FriendName':$scope.names[$val].UserName}
- 		).success(function(data, status, headers, config) {
- 			alert(data);
+ 	$http.get('http://localhost:1337/php_delete_friend?UserName='+$scope.UserName+'&FriendName='+$scope.names[$val].FriendName)
+ 	.success(function(data, status, headers, config) {
+ 		if(data.length>1)
+ 			console.log(data);
  			$scope.getAllFriends();
  		}).error(function(data, status) { 
  			alert("Error While Updating,Try Again");
@@ -70,13 +69,15 @@ $scope.addFriend=function($val){
 
 //get appointments
 $scope.trips='';
-$scope.getApps=function($val){
+$scope.getTrips=function($val){
 	var d = new Date();
 	var n = d.getMonth();
-	$http.post('./php/php_get_user_apps.php', {'UserName':$scope.names[$val].UserName,'Month':n+1}
-		).success(function(data, status, headers, config) {
-			alert(data);
-			$scope.trips=data;
+	n=n+1;
+	$http.get('http://localhost:1337/php_get_user_apps?UserName='+$scope.names[$val].FriendName+'&Month='+n)
+	.success(function(data, status, headers, config) {
+			console.log(data);
+			if(data.length>0)
+				$scope.trips=data;
 		}).error(function(data, status) { 
 			alert("Error While Updating,Try Again");
 

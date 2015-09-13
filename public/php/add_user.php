@@ -12,11 +12,11 @@ if (!$conn) {
 else{
     if(true){
         $data = json_decode(file_get_contents("php://input"));
-        $UserName = mysqli_real_escape_string($conn,$data->UserName);
-        $EmailId = mysqli_real_escape_string($conn,$data->EmailId);
-        $PicLink = mysqli_real_escape_string($conn,$data->PicLink);
+        $UserName = $_POST["UserName"];//mysqli_real_escape_string($conn,$data->UserName);
+        $EmailId = $_POST["Emailid"];//mysqli_real_escape_string($conn,$data->Emailid);
+        $PicLink = $_POST["PicLink"];//mysqli_real_escape_string($conn,$data->PicLink);
         
-        $sql = "INSERT into users (UserName,EmailId,PicLink) VALUES('$UserName','$EmailId','$PicLink')";
+        $sql = "INSERT into users (UserName,Emailid,PicLink) VALUES('$UserName','$EmailId','$PicLink')";
         $result = $conn->query($sql);
         echo $name.' Added Successfully as '.$reln;
     }

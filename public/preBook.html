@@ -16,7 +16,8 @@
 
     <!-- Custom CSS -->
     <link href="css/simple-sidebar.css" rel="stylesheet">
-
+    <link href="css/alertify.css" rel="stylesheet">
+    <link href="css/alertify.default.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -35,7 +36,7 @@
             <div id="sidebar-wrapper">
                 <ul class="sidebar-nav">
                     <li class="sidebar-brand">
-                        <img src="a.jpg" style="width:70px;height:70px;"/>
+                        <img ng-src="{{imglink}}" style="width:70px;height:70px;"/>
                     </li>
                     <li>
                         <a href="afterLogin.html">Dashboard</a>
@@ -64,7 +65,6 @@
                             <div id="map" style="width: 400px; height: 500px;" ></div> 
                         </div>
                         <div class="col-lg-6">
-                            
                                 <input placeholder="Enter Origin" class="form form-control" ng-model="origin" id="orgn"/>
                                 <br/>
                                 <input placeholder="Enter Destination" class="form form-control" ng-model="destination" id="dstn"/>
@@ -79,7 +79,21 @@
                                 <br/><br/>
                                 <span width="200px" style="visible:hidden;color:#eee ;">gfhjklgfhjklgfhjklgfhjkl;</span><Button class="btn btn-success" ng-click="confirmBooking()">Confirm Pre Book</Button>
                                 <br/>
-                            
+                              <div ng-show="showVehicles">
+                                Vehicles:
+                            <div ng-repeat="v in vehicles.products track by $index" >
+                            {{v.display_name}}
+                            </div>
+                            </div>
+                             <div ng-hide="showVehicles">
+                                Fares:
+                            <div ng-repeat="fr in fare.prices track by $index" >
+                            Car:{{fr.display_name}}
+                            Distance:{{fr.distance}}
+                            Estimate:{{fr.estimate}}
+                            <hr/>
+                            </div>
+                            </div>
                         </div>
                         
                     </div>
@@ -154,6 +168,7 @@
 });
 });
 </script>
+<script src="js/alertify.js"></script>
 <script src="js/angular.min.js"></script>
 <script src="js/preBook-angular.js"></script>
 </body>
