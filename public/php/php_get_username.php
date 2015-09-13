@@ -13,8 +13,8 @@ if (!$conn) {
 else{
 	if(true){
 		$data = json_decode(file_get_contents("php://input"));
-		$UserName = mysqli_real_escape_string($conn,$data->UserName);
-		$Month = mysqli_real_escape_string($conn,$data->Month);
+		$UserName = $_POST["UserName"];//mysqli_real_escape_string($conn,$data->UserName);
+		$Month = $_POST["Month"];//mysqli_real_escape_string($conn,$data->Month);
 		$sql = "SELECT * FROM userapps where UserName='$UserName' and Month='$Month'";
 
 		$result = $conn->query($sql);

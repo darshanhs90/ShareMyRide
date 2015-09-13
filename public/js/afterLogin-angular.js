@@ -2,6 +2,26 @@ var app=angular.module('myApp',[]);
 app.controller('myCtrl',function($scope,$http,$sce) {
 	$scope.a='';
   $scope.picLink='';
+var lat,longt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	$http({
 		url: 'http://localhost:1337/getHistory',
 		method: "GET"
@@ -147,5 +167,48 @@ $http.get('http://localhost:1337/sendphp?UserName='+data.first_name+'&Emailid='+
       alert("Error While Updating,Try Again");
     });
   });
+navigator.geolocation.getCurrentPosition(GetLocation);
+function GetLocation(location) {
+    lat=(location.coords.latitude);
+    longt=(location.coords.longitude);
+    console.log(lat);
+    lat="32.961790";
+    longt="-96.829169";
+$http({
+    url: 'http://localhost:1337/getTimeEstimate?start_lat='+lat+'&start_long='+longt,
+    method: "GET"
+  }).success(function(data, status, headers, config) {
+console.log('here');
+console.log(data);
+
+var dta=[];
+for (var i = 0; i <data.times.length-1; i++) {
+  var obj={y:data.times[i].display_name,a:data.times[i].estimate/100}
+  dta.push(obj);
+};
+
+
+Morris.Bar({
+  element: 'bar-example',
+  data: dta,
+  xkey: 'y',
+  ykeys: ['a'],
+  labels: ['Time Estimate']
+});
+
+
+
+
+
+  });
+}
+
+
+
+
+
+
+
+
 
 });

@@ -18,7 +18,7 @@ else{
         
         $sql = "INSERT into users (UserName,Emailid,PicLink) VALUES('$UserName','$EmailId','$PicLink')";
         $result = $conn->query($sql);
-        echo $name.' Added Successfully as '.$reln;
+        echo ' Added Successfully ';
     }
 }
 $conn->close();

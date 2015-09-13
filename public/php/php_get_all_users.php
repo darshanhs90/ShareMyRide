@@ -13,7 +13,7 @@ if (!$conn) {
 else{
 	if(true){
 		$data = json_decode(file_get_contents("php://input"));
-		$UserName = mysqli_real_escape_string($conn,$data->UserName);
+		$UserName = $_POST["UserName"];//mysqli_real_escape_string($conn,$data->UserName);
 		$sql = "SELECT * FROM users ";
 
 		$result = $conn->query($sql);

@@ -14,12 +14,12 @@ else{
     if(true){
     //$mail='asd@asd.com';    
     $data = json_decode(file_get_contents("php://input"));
-    $UserName = mysqli_real_escape_string($conn,$data->UserName);
-    $Friendname = mysqli_real_escape_string($conn,$data->Friendname);
-    $sql = "DELETE from userrelations where username='$UserName' and FriendName='$FriendName'";
+    $UserName = $_POST["UserName"];//mysqli_real_escape_string($conn,$data->UserName);
+    $FriendName = $_POST["FriendName"];//mysqli_real_escape_string($conn,$data->Friendname);
+    $sql = "DELETE from userrelations where UserName='$UserName' and FriendName='$FriendName'";
     $result = $conn->query($sql);
     if(mysqli_affected_rows($conn)==0){
-    echo "Deletion Unsuccessful";   
+    echo "Deletion Successful";   
     }
     else{
     echo "Deletion Successful";

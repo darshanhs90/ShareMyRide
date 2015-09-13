@@ -258,3 +258,20 @@ app.get('/php_add_my_apps', function(reqst, res) {
 
 
 });
+
+
+
+app.get('/getTimeEstimate', function(reqst, res) {
+		request({
+			method: 'GET',
+			url: 'https://api.uber.com/v1/estimates/time?start_latitude='+reqst.query.start_lat+'&start_longitude='+reqst.query.start_long,
+			headers:{
+				"Authorization":"Bearer "+token
+			},
+		},
+		function (error, response, body) {
+			console.log(body);
+			res.send(body);
+			res.end();
+		});
+	});
