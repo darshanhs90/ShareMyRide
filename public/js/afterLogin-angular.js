@@ -14,16 +14,16 @@ app.controller('myCtrl',function($scope,$http,$sce) {
 			labelsValue.push(hist[i].distance);
 		};
 		var chart = new Chartist.Line('.ct-chart', {
-  labels: keys,
-  series: [labelsValue]
-}, {
-  low: 0
-});
+      labels: keys,
+      series: [labelsValue]
+    }, {
+      low: 0
+    });
 
 // Let's put a sequence number aside so we can use it in the event callbacks
 var seq = 0,
-  delays = 80,
-  durations = 50;
+delays = 80,
+durations = 50;
 
 // Once the chart is fully created we reset the sequence
 chart.on('created', function() {
@@ -128,4 +128,11 @@ chart.on('draw', function(data) {
 
 
 });
+
+
+$http({
+  url: 'http://localhost:1337/setProfile',
+  method: "GET"
+}).success(function(data, status, headers, config) {
+  console.log(data);
 });

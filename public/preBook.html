@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="myApp">
 
 <head>
 
@@ -27,7 +27,7 @@
         type="text/javascript"></script>
     </head>
 
-    <body>
+    <body ng-controller="myCtrl">
 
         <div id="wrapper">
 
@@ -35,9 +35,7 @@
             <div id="sidebar-wrapper">
                 <ul class="sidebar-nav">
                     <li class="sidebar-brand">
-                        <a href="index.html">
-                            Home
-                        </a>
+                        <img src="a.jpg" style="width:70px;height:70px;"/>
                     </li>
                     <li>
                         <a href="afterLogin.html">Dashboard</a>
@@ -66,22 +64,22 @@
                             <div id="map" style="width: 400px; height: 500px;" ></div> 
                         </div>
                         <div class="col-lg-6">
-                            <form >
-                                <input placeholder="Enter Origin" class="form form-control"/>
+                            
+                                <input placeholder="Enter Origin" class="form form-control" ng-model="origin" id="orgn"/>
                                 <br/>
-                                <input placeholder="Enter Destination" class="form form-control"/>
+                                <input placeholder="Enter Destination" class="form form-control" ng-model="destination" id="dstn"/>
                                 <br/>
-                                <input type="time" placeholder="Enter Time" class="form form-control"/>
+                                <input type="datetime-local" placeholder="Enter Time" class="form form-control" ng-model="dttime"/>
                                 <br/>
-                                <input placeholder="Enter Event Name" class="form form-control"/>
+                                <input placeholder="Enter Event Name" class="form form-control" ng-model="eventname"/>
                                 <br/>
-                                <Button class="btn btn-info">Get Vehicles</Button>
-                                <Button class="btn btn-info">Estimate Fare</Button>
-                                <Button class="btn btn-info">Check For Friends</Button>
+                                <Button class="btn btn-info" ng-click="getVehicles()">Get Vehicles</Button>
+                                <Button class="btn btn-info" ng-click="getFare()">Estimate Fare</Button>
+                                <Button class="btn btn-info" ng-click="checkFriends()">Check For Friends</Button>
                                 <br/><br/>
-                                <span width="200px" style="visible:hidden;color:#eee ;">gfhjklgfhjklgfhjklgfhjkl;</span><Button class="btn btn-success">Confirm Pre Book</Button>
+                                <span width="200px" style="visible:hidden;color:#eee ;">gfhjklgfhjklgfhjklgfhjkl;</span><Button class="btn btn-success" ng-click="confirmBooking()">Confirm Pre Book</Button>
                                 <br/>
-                            </form>
+                            
                         </div>
                         
                     </div>
@@ -134,12 +132,19 @@
       directionsDisplay.setDirections(response);
   }
 });
+  var i=0;
   google.maps.event.addListener(map, "mousedown", function(event){
     var obj=JSON.parse(JSON.stringify(event));
-    console.log(obj.latLng.G);
-    console.log(obj.latLng.K);
-    request.destination='720,McCallum Blvd,Apt 3075,Dallas,Texas-75252';
-    request.origin='California';
+    if(i==0){
+        request.origin={lat:obj.latLng.G,lng:obj.latLng.K};
+        document.getElementById("orgn").value = 'lat='+obj.latLng.G+' lng:'+obj.latLng.K;
+        i=1;
+    }
+    else{
+        request.destination={lat:obj.latLng.G,lng:obj.latLng.K};
+        document.getElementById("dstn").value = 'lat='+obj.latLng.G+' lng:'+obj.latLng.K;
+        i=0
+    }
     directionsService = new google.maps.DirectionsService();
     directionsService.route(request, function(response, status) {
         if (status == google.maps.DirectionsStatus.OK) {

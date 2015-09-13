@@ -87,6 +87,7 @@ app.get('/setProfile', function(reqst, res) {
 		},
 		function (error, response, body) {
 			prof=body;
+			res.send(body);
 			res.end();
 		});
 	});
@@ -98,10 +99,10 @@ app.get('/getProfile', function(reqst, res) {
 
 
 app.get('/getPrice', function(reqst, res) {
-		var start_lat=reqst.query.start_lat;
-		var end_lat=reqst.query.end_lat;
-		var start_long=reqst.query.start_long;
-		var end_long=reqst.query.end_long;
+		start_lat=reqst.query.start_lat;
+		end_lat=reqst.query.end_lat;
+		start_long=reqst.query.start_long;
+		end_long=reqst.query.end_long;
 		
 		request({
 			method: 'GET',
@@ -116,6 +117,7 @@ app.get('/getPrice', function(reqst, res) {
 		});
 	});
 var products='';
+var start_lat='',start_long='',end_lat='',end_long='';
 app.get('/getProducts', function(reqst, res) {
 		var latitude=reqst.query.latitude;
 		var longitude=reqst.query.longitude;
@@ -135,11 +137,10 @@ app.get('/getProducts', function(reqst, res) {
 
 
 app.get('/makeRequest', function(reqst, res) {
-		var start_lat=reqst.query.start_lat;
-		var start_long=reqst.query.start_long;
-		var end_lat=reqst.query.end_lat;
-		var end_long=reqst.query.end_long;
-		
+		 start_lat=reqst.query.start_lat;
+		 start_long=reqst.query.start_long;
+		 end_lat=reqst.query.end_lat;
+		 end_long=reqst.query.end_long;
 		request({
 			method: 'POST',
 			url: 'https://sandbox-api.uber.com/v1/requests',
