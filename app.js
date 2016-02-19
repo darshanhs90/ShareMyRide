@@ -11,11 +11,11 @@ var http = require('http');
 var request = require('request');
 var https = require('https');
 var cors = require('cors');
-var sendgrid = require('sendgrid')('prajwal19@gmail.com', 'Prajwalhk19');
-var accountSid = 'AC07275e4294f1b0d42623c3ec9559911e';
-var authToken = '650d049a9bd99323fb899ce4b9e84fcc';
+var sendgrid = require('sendgrid')('username@gmail.com', 'password');
+var accountSid = 'accountid';
+var authToken = 'authtoken';
 var blockchain = require('blockchain.info');
-var myWallet = new blockchain.MyWallet('aff31a59-4977-4313-bbdd-19feddb70c4f', 'Password90-');
+var myWallet = new blockchain.MyWallet('blockchainid', 'password-');
 var exchangeRates = blockchain.exchangeRates;
 var statistics = blockchain.statistics;
 var clientTwilio = require('twilio')(accountSid, authToken);
@@ -35,9 +35,9 @@ var mapData=[];
  */
  var gateway = braintree.connect({
   environment:  braintree.Environment.Sandbox,
-  merchantId:   'zwh8pg7kfy2nzvhp',
-  publicKey:    '6jw3rx8zs6qnq377',
-  privateKey:   '57f7f84f0aed9ad871fddf21a823b9fc'
+  merchantId:   'merchantid',
+  publicKey:    'publickey',
+  privateKey:   'privatekey'
 });
 // cfenv provides access to your Cloud Foundry environment
 // for more info, see: https://www.npmjs.com/package/cfenv
